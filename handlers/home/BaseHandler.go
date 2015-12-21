@@ -1,4 +1,4 @@
-package handlers
+package home
 
 import (
 	"github.com/astaxie/beego"

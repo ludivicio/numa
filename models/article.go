@@ -8,40 +8,40 @@ import (
 /*
 
 CREATE TABLE IF NOT EXISTS `article` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `cate_id` tinyint(3) unsigned NOT NULL COMMENT '文章类别ID',
-  `title` varchar(255) NOT NULL COMMENT '文章标题',
-  `author` varchar(100) NOT NULL COMMENT '文章作者',
-  `tags` varchar(45) DEFAULT NULL COMMENT '文章标签',
-  `image` varchar(100) NOT NULL COMMENT '缩略图url',
-  `content` text NOT NULL COMMENT '文章内容',
-  `hits` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '点击数',
-  `post_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '添加时间',
-  `last_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后修改时间',
-  `status` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '是否可用 {0:不可用, 1:可用}',
-  `order` tinyint(3) unsigned NOT NULL DEFAULT '255' COMMENT '排序',
-  `seo_title` varchar(255) NOT NULL COMMENT 'SEO标题',
-  `seo_keys` varchar(255) NOT NULL COMMENT 'SEO关键字',
-  `seo_desc` text NOT NULL COMMENT 'SEO描述',
-  `comment_count` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '评论数',
+  `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `cate_id` TINYINT(4) UNSIGNED NOT NULL COMMENT '文章类别ID',
+  `title` VARCHAR(100) NOT NULL COMMENT '文章标题',
+  `color` varchar(7) NOT NULL DEFAULT '#000000' COMMENT '标题颜色',
+  `author` VARCHAR(15) NOT NULL COMMENT '文章作者',
+  `tags` VARCHAR(100) NOT NULL COMMENT '文章标签',
+  `thumb_url` VARCHAR(100) NOT NULL COMMENT '缩略图url',
+  `content` TEXT NOT NULL COMMENT '文章内容',
+  `hits` INT(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '点击数',
+  `post_time` datetime NOT NULL COMMENT '添加时间',
+  `last_time` datetime NOT NULL COMMENT '最后修改时间',
+  `status` TINYINT(4) UNSIGNED NOT NULL DEFAULT 1 COMMENT '是否可用 {0:不可用, 1:可用}',
+  `order` TINYINT(4) UNSIGNED NOT NULL DEFAULT 255 COMMENT '排序',
+  `seo_title` VARCHAR(255) NOT NULL COMMENT 'SEO标题',
+  `seo_keys` VARCHAR(255) NOT NULL COMMENT 'SEO关键字',
+  `seo_desc` TEXT NOT NULL COMMENT 'SEO描述',
+  `comment_count` INT(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '评论数',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='文章表' AUTO_INCREMENT=1 ;
-
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='文章表';
 */
 
 type Article struct {
-  Id int64
-  CateId int64 `orm:"column(cate_id);index"`
-  Title string `orm:"size(100)"`
-  Color string `orm:"size(7)"`
-  Author string `orm:"size(15)"`
-  Tags string  `orm:"size(100)"`
-  ThumbUrl string `orm:"size(100)"`
+  Id int32
+  CateId int32 `orm:"column(cate_id);index"`
+  Title string `orm:"size(100);index"`
+  Color string `orm:"size(7);default(#00000)"`
+  Author string `orm:"size(15);index"`
+  Tags string  `orm:"size(100);index"`
+  ThumbUrl string `orm:"size(255)"`
   Content string `orm:"type(text)"`
   Hits int32
   PostTime time.Time `orm:"type(datetime);index"`
   LastTime time.Time `orm:"type(datetime);index"`
-  Status int8
+  Status int8 `orm:"index"`
   Order int8 
   SeoTitle string `orm:"column(seo_title);size(255)"`
   SeoKeys string `orm:"column(seo_keys);size(255)"`

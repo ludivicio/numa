@@ -2,20 +2,19 @@ SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
-CREATE SCHEMA IF NOT EXISTS `kaluomao` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci ;
-USE `kaluomao` ;
+CREATE SCHEMA IF NOT EXISTS `numa` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci ;
+USE `numa` ;
 
 -- -----------------------------------------------------
--- Table `kaluomao`.`ka_admin`
+-- Table `numa`.`ka_admin`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `kaluomao`.`ka_admin` (
+CREATE TABLE IF NOT EXISTS `numa`.`tb_admin` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `account` VARCHAR(16) NOT NULL DEFAULT '' COMMENT '账号',
+  `account` VARCHAR(32) NOT NULL DEFAULT '' COMMENT '账号',
   `password` VARCHAR(32) NOT NULL DEFAULT '' COMMENT '管理员密码',
-  `last_ip` VARCHAR(15) NOT NULL COMMENT '最后登录的ip地址',
-  `role_id` SMALLINT NOT NULL COMMENT '角色ID',
-  `last_time` INT(10) NOT NULL DEFAULT 0 COMMENT '最后登录的时间',
-  `email` VARCHAR(45) NULL COMMENT '邮箱',
+  `last_ip` VARCHAR(32) NOT NULL COMMENT '最后登录的ip地址',
+  `last_time` datetime NOT NULL COMMENT '最后登录的时间',
+  `email` VARCHAR(100) NULL COMMENT '邮箱',
   `status` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '账号是否可用 {0:不可用, 1:可用}',
   PRIMARY KEY (`id`),
   UNIQUE INDEX `account` (`account` ASC))
@@ -23,41 +22,16 @@ ENGINE = MyISAM
 COMMENT = '管理员信息表';
 
 --
--- Dumping data for table `ka_admin`
+-- 转存表中的数据 `tb_admin`
 --
-
 INSERT INTO `ka_admin` (`id`, `account`, `password`, `last_ip`, `role_id`, `last_time`, `email`, `status`) VALUES
-(1, 'admin', '21232f297a57a5a743894a0e4a801fc3', '127.0.0.1', 1, 1403316383, 'lurma@qq.com', 1);
-
-
--- -----------------------------------------------------
--- Table `kaluomao`.`ka_admin_role`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `kaluomao`.`ka_admin_role` (
-  `id` TINYINT(3) NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(45) NOT NULL COMMENT '角色名',
-  `remark` TEXT NOT NULL COMMENT '备注',
-  `order` TINYINT(3) NOT NULL COMMENT '排序值',
-  `status` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '是否可用 {0:不可用, 1:可用}',
-  PRIMARY KEY (`id`))
-ENGINE = MyISAM
-COMMENT = '管理员角色表';
-
-
---
--- Dumping data for table `ka_admin_role`
---
-
-INSERT INTO `ka_admin_role` (`id`, `name`, `remark`, `order`, `status`) VALUES
-(1, '超级管理员', '拥有所有的权限', 0, 1),
-(2, '管理员', '拥有部分的权限', 1, 1),
-(3, '编辑', '只有商品的增删改查权限', 2, 1);
-
+(1, 'admin', '21232f297a57a5a743894a0e4a801fc3', '127.0.0.1', 1399293326, 'lurma@qq.com', 1);
+-- --------------------------------------------------------
 
 -- -----------------------------------------------------
--- Table `kaluomao`.`ka_article`
+-- Table `numa`.`tb_article`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `kaluomao`.`ka_article` (
+CREATE TABLE IF NOT EXISTS `numa`.`tb_article` (
   `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `cate_id` TINYINT(3) UNSIGNED NOT NULL COMMENT '文章类别ID',
   `title` VARCHAR(255) NOT NULL COMMENT '文章标题',
@@ -80,9 +54,9 @@ COMMENT = '文章表';
 
 
 -- -----------------------------------------------------
--- Table `kaluomao`.`ka_article_cate`
+-- Table `numa`.`ka_article_cate`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `kaluomao`.`ka_article_cate` (
+CREATE TABLE IF NOT EXISTS `numa`.`ka_article_cate` (
   `id` TINYINT(3) NOT NULL,
   `name` VARCHAR(100) NOT NULL COMMENT '类别名称',
   `alias` VARCHAR(45) NOT NULL COMMENT '别名',
@@ -100,9 +74,9 @@ COMMENT = '文章类别表';
 
 
 -- -----------------------------------------------------
--- Table `kaluomao`.`ka_auto_user`
+-- Table `numa`.`ka_auto_user`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `kaluomao`.`ka_auto_user` (
+CREATE TABLE IF NOT EXISTS `numa`.`ka_auto_user` (
   `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(100) NOT NULL COMMENT '名称',
   PRIMARY KEY (`id`))
@@ -111,13 +85,13 @@ COMMENT = '系统自动生成的用户';
 
 
 -- -----------------------------------------------------
--- Table `kaluomao`.`ka_item`
+-- Table `numa`.`ka_item`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `kaluomao`.`ka_item` (
+CREATE TABLE IF NOT EXISTS `numa`.`ka_item` (
   `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `title` VARCHAR(255) NOT NULL COMMENT '商品标题',
   `cid` INT(10) UNSIGNED NOT NULL COMMENT '分类ID',
-  `mid` INT(10) UNSIGNED NOT NULL COMMENT '商城ID',
+  `fid` INT(10) UNSIGNED NOT NULL COMMENT '从属ID（B2C，C2C）',
   `tcolor` VARCHAR(10) NOT NULL COMMENT '标题颜色',
   `url` VARCHAR(255) NOT NULL COMMENT '购买链接',
   `price` VARCHAR(10) NOT NULL COMMENT '折扣价',
@@ -147,9 +121,9 @@ COMMENT = '商品表';
 
 
 -- -----------------------------------------------------
--- Table `kaluomao`.`ka_item_cate`
+-- Table `numa`.`ka_item_cate`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `kaluomao`.`ka_item_cate` (
+CREATE TABLE IF NOT EXISTS `numa`.`ka_item_cate` (
   `id` TINYINT(3) UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NOT NULL COMMENT '分类名称',
   `alias` VARCHAR(45) NOT NULL COMMENT '别名',
@@ -164,29 +138,10 @@ ENGINE = MyISAM
 COMMENT = '商品分类表';
 
 
---
--- Dumping data for table `ka_item_cate`
---
-
-INSERT INTO `ka_item_cate` (`id`, `name`, `alias`, `pid`, `order`, `status`, `seo_title`, `seo_keys`, `seo_desc`) VALUES
-(1, '电脑数码', '', 0, 1, 1, '电脑数码', '电脑、3C、数码', '数码产品，最有性价比'),
-(2, '家用电器', '', 0, 2, 1, '家用电器', '电器、家电', '电器、家电'),
-(3, '运动户外', '', 0, 3, 1, '运动户外', '运动、户外', '运动、户外'),
-(4, '服饰鞋包', '', 0, 4, 1, '服饰鞋包', '服饰、衣服、女装、鞋包', '服饰、衣服、女装、鞋包'),
-(5, '个护化妆', '', 0, 5, 1, '个护化妆', '护理、化妆品', '个人护理、化妆品、美发'),
-(6, '母婴用品', '', 0, 6, 1, '母婴用品', '母婴用品', '婴儿用品'),
-(7, '手机通讯', '', 1, 1, 1, '手机通讯', '手机、通讯、数码', '手机、通讯、电话卡'),
-(8, '数码配件', '', 1, 2, 1, '数码配件', '数码配件', '数码配件'),
-(9, '生活电器', '', 2, 2, 1, '生活电器', '生活电器', '生活电器'),
-(10, '厨房电器', '', 2, 1, 1, '厨房电器', '厨房电器', '厨房电器'),
-(11, '存储设备', '', 1, 3, 1, '存储设备', '存储设备', '存储设备'),
-(12, '营养辅食', '', 6, 1, 1, '营养辅食', '营养辅食', '营养辅食');
-
-
 -- -----------------------------------------------------
--- Table `kaluomao`.`ka_item_comment`
+-- Table `numa`.`ka_item_comment`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `kaluomao`.`ka_item_comment` (
+CREATE TABLE IF NOT EXISTS `numa`.`ka_item_comment` (
   `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `item_id` INT(10) UNSIGNED NOT NULL COMMENT '商品ID',
   `pid` INT(10) UNSIGNED NOT NULL COMMENT '父ID',
@@ -200,9 +155,9 @@ COMMENT = '商品评论表';
 
 
 -- -----------------------------------------------------
--- Table `kaluomao`.`ka_tag`
+-- Table `numa`.`ka_tag`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `kaluomao`.`ka_tag` (
+CREATE TABLE IF NOT EXISTS `numa`.`ka_tag` (
   `id` INT(10) NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NOT NULL COMMENT '标签名',
   PRIMARY KEY (`id`))
@@ -211,9 +166,9 @@ COMMENT = '标签表';
 
 
 -- -----------------------------------------------------
--- Table `kaluomao`.`ka_item_tag`
+-- Table `numa`.`ka_item_tag`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `kaluomao`.`ka_item_tag` (
+CREATE TABLE IF NOT EXISTS `numa`.`ka_item_tag` (
   `item_id` INT(10) UNSIGNED NOT NULL COMMENT '商品ID',
   `tag_id` INT(10) UNSIGNED NOT NULL COMMENT '标签ID',
   UNIQUE INDEX `item_id_UNIQUE` (`item_id` ASC),
@@ -223,9 +178,9 @@ COMMENT = '商品标签对应表';
 
 
 -- -----------------------------------------------------
--- Table `kaluomao`.`ka_baoliao`
+-- Table `numa`.`ka_baoliao`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `kaluomao`.`ka_baoliao` (
+CREATE TABLE IF NOT EXISTS `numa`.`ka_baoliao` (
   `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `title` VARCHAR(255) NOT NULL COMMENT '标题',
   `url` VARCHAR(255) NOT NULL COMMENT '链接',
@@ -240,22 +195,12 @@ COMMENT = '用户爆料表';
 
 
 -- -----------------------------------------------------
--- Table `kaluomao`.`ka_mall`
+-- Table `numa`.`ka_item_from`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `kaluomao`.`ka_mall` (
+CREATE TABLE IF NOT EXISTS `numa`.`ka_item_from` (
   `id` INT(10) NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NOT NULL COMMENT '大类别的名称',
   `remark` VARCHAR(45) NULL DEFAULT '' COMMENT '备注',
-  `bimage` VARCHAR(45) NOT NULL COMMENT '商城logo（大图）',
-  `mimage` VARCHAR(45) NULL COMMENT '商城logo（中图）',
-  `simage` VARCHAR(45) NULL COMMENT '商城logo（小图）',
-  `desc` TEXT NULL COMMENT '商城介绍',
-  `order` TINYINT(3) NULL COMMENT '排序',
-  `seo_title` VARCHAR(255) NULL COMMENT 'seo title',
-  `seo_keys` VARCHAR(255) NULL COMMENT 'SEO关键字',
-  `seo_desc` TEXT NULL COMMENT 'SEO描述',
-  `add_time` INT(10) NOT NULL COMMENT '添加时间',
-  `last_time` INT(10) NOT NULL COMMENT '最后一次修改的时间',
   PRIMARY KEY (`id`),
   UNIQUE INDEX `name_UNIQUE` (`name` ASC))
 ENGINE = MyISAM

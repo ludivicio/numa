@@ -6,18 +6,17 @@ import (
 
 /*
 
-CREATE TABLE IF NOT EXISTS `kaluomao`.`ka_auto_user` (
+CREATE TABLE IF NOT EXISTS `auto_user` (
   `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(100) NOT NULL COMMENT '名称',
-  PRIMARY KEY (`id`))
-ENGINE = MyISAM
-COMMENT = '系统自动生成的用户';
+  `name` VARCHAR(32) NOT NULL COMMENT '名称',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='系统自动生成的用户';
 
 */
 
 // 机器用户表
 type AutoUser struct {
-    Id int64
+    Id int32
     Name string      `orm:"unique;size(32)"`
 }
 

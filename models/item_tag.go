@@ -7,19 +7,18 @@ import (
 /*
 
 CREATE TABLE IF NOT EXISTS `item_tag` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
   `item_id` int(10) unsigned NOT NULL COMMENT '商品ID',
-  `tag_id` int(10) unsigned NOT NULL COMMENT '标签ID',
-  UNIQUE KEY `item_id_UNIQUE` (`item_id`),
-  UNIQUE KEY `tag_id_UNIQUE` (`tag_id`)
+  `tag_id` int(10) unsigned NOT NULL COMMENT '标签ID'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品标签对应表';
 
 */
 
 //标签内容关系表
 type ItemTag struct {
-	Id         int64
-	ItemId     int64 `orm:"column(item_id);index"`
-	TagId     int64 `orm:"column(tag_id);index"`
+	Id         int32
+	ItemId     int32 `orm:"column(item_id);index"`
+	TagId     int32 `orm:"column(tag_id);index"`
 }
 
 func (m *ItemTag) TableName() string {

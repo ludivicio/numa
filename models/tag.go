@@ -17,9 +17,9 @@ CREATE TABLE IF NOT EXISTS `tag` (
 
 //标签表
 type Tag struct {
-	Id    int64
+	Id    int32
 	Name  string `orm:"size(20);index"`
-	Count int64
+	Count int32
 }
 
 func (m *Tag) TableName() string {

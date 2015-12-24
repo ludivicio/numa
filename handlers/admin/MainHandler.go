@@ -1,6 +1,7 @@
 package admin
 
 import (
+	"numa/models"
 	"fmt"
 )
 
@@ -13,4 +14,5 @@ func (m *MainHandler) Get() {
 	m.Data["Email"] = "astaxie@gmail.com"
 	m.TplNames = "index.tpl"
 	fmt.Println("test main")
+	fmt.Println(new(models.Article))
 }

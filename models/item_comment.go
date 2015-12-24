@@ -8,26 +8,26 @@ import (
 /*
 
 CREATE TABLE IF NOT EXISTS `item_comment` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `item_id` int(10) unsigned NOT NULL COMMENT '商品ID',
-  `pid` int(10) unsigned NOT NULL COMMENT '父ID',
-  `client_ip` varchar(15) NOT NULL COMMENT '发布者的IP',
-  `content` text NOT NULL COMMENT '评论内容',
-  `add_time` int(10) NOT NULL COMMENT '评论时间',
-  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否可用 {0:不可用, 1:可用}',
+  `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `item_id` INT(10) UNSIGNED NOT NULL COMMENT '商品ID',
+  `pid` INT(10) UNSIGNED NOT NULL COMMENT '父ID',
+  `client_ip` VARCHAR(32) NOT NULL COMMENT '发布者的IP',
+  `content` TEXT NOT NULL COMMENT '评论内容',
+  `post_time` datetime NOT NULL COMMENT '评论时间',
+  `status` TINYINT(4) NOT NULL DEFAULT 1 COMMENT '是否可用 {0:不可用, 1:可用}',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品评论表' AUTO_INCREMENT=1 ;
 
 */
 
 type ItemComment struct {
-  Id int64
-  ItemId int64 `orm:"column(item_id);index"`
-  Pid int64
+  Id int32
+  ItemId int32 `orm:"column(item_id);index"`
+  Pid int32
   ClientIp string  `orm:"column(client_ip);size(32)"`
   Content string `orm:"type(text)"`
   PostTime time.Time `orm:"type(datetime);index"`
-  Status int8
+  Status int8 `orm:"index"`
 }
 
 func (m *ItemComment) TableName() string {

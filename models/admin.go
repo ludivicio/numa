@@ -8,24 +8,24 @@ import (
 /*
 
 CREATE TABLE IF NOT EXISTS `admin` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `account` varchar(16) NOT NULL DEFAULT '' COMMENT '账号',
-  `password` varchar(32) NOT NULL DEFAULT '' COMMENT '管理员密码',
-  `last_ip` varchar(15) NOT NULL COMMENT '最后登录的ip地址',
-  `last_time` int(10) NOT NULL DEFAULT '0' COMMENT '最后登录的时间',
-  `email` varchar(45) DEFAULT NULL COMMENT '邮箱',
-  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '账号是否可用 {0:不可用, 1:可用}',
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `account` VARCHAR(32) NOT NULL DEFAULT '' COMMENT '账号',
+  `password` VARCHAR(32) NOT NULL DEFAULT '' COMMENT '管理员密码',
+  `last_ip` VARCHAR(32) NOT NULL COMMENT '最后登录的ip地址',
+  `last_time` datetime NOT NULL COMMENT '最后登录的时间',
+  `email` VARCHAR(100) NULL COMMENT '邮箱',
+  `status` TINYINT(4) NOT NULL DEFAULT 1 COMMENT '账号是否可用 {0:不可用, 1:可用}',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `account` (`account`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='管理员信息表' AUTO_INCREMENT=1 ;
+  UNIQUE INDEX `account` (`account` ASC)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='管理员信息表';
 
 
 */
 
 // 管理员表
 type Admin struct {
-    Id int64
-    Account string      `orm:"unique;size(32)"`
+    Id int32
+    Account string      `orm:"unique;size(32);index;"`
     Password string     `orm:"size(32)"`
     LastIp string       `orm:"size(32)"`
     LastTime time.Time  `orm:"type(datatime);index"`

@@ -19,8 +19,8 @@ CREATE TABLE IF NOT EXISTS `mall` (
   `seo_title` varchar(255) DEFAULT NULL COMMENT 'seo title',
   `seo_keys` varchar(255) DEFAULT NULL COMMENT 'SEO关键字',
   `seo_desc` text COMMENT 'SEO描述',
-  `add_time` int(10) NOT NULL COMMENT '添加时间',
-  `last_time` int(10) NOT NULL COMMENT '最后一次修改的时间',
+  `post_time` datetime NOT NULL COMMENT '添加时间',
+  `last_time` datetime NOT NULL COMMENT '最后一次修改的时间',
   PRIMARY KEY (`id`),
   UNIQUE KEY `name_UNIQUE` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品所属大分类' AUTO_INCREMENT=1 ;
@@ -28,8 +28,7 @@ CREATE TABLE IF NOT EXISTS `mall` (
 */
 
 type Mall struct {
-  Id int64
-  CateId int64 `orm:"column(cate_id);index"`
+  Id int32
   Name string `orm:"size(100)"`
   Remark string `orm:"size(100)"`
   BigImage string `orm:"column(bimage);size(255)"`

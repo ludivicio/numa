@@ -14,12 +14,12 @@ var(
 )
 
 
-type BaseHandler struct {
+type BaseController struct {
 	beego.Controller
 }
 
 
-func (this *BaseHandler) Prepare() {
+func (this *BaseController) Prepare() {
 	// 从session里读取登录信息
 	sess_username, _ = this.GetSession("username").(string)
 	sess_uid, _ = this.GetSession("userid").(int64)

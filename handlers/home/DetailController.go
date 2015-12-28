@@ -4,11 +4,11 @@ import (
 	"fmt"
 )
 
-type DetailHandler struct {
-	BaseHandler
+type DetailController struct {
+	BaseController
 }
 
-func (d *DetailHandler) Get() {
+func (d *DetailController) Get() {
 	d.Data["Website"] = "beego.me"
 	d.Data["Email"] = "astaxie@gmail.com"
 	d.TplNames = "home/detail.tpl"

@@ -4,11 +4,11 @@ import (
 	"fmt"
 )
 
-type HomeHandler struct {
-	BaseHandler
+type HomeController struct {
+	BaseController
 }
 
-func (h *HomeHandler) Index() {
+func (h *HomeController) Index() {
 	h.Data["Website"] = "beego.me"
 	h.Data["Email"] = "astaxie@gmail.com"
 	h.TplNames = "home/index.tpl"

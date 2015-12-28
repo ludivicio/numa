@@ -9,11 +9,11 @@ import (
 func init() {
 
 	// 前台首页
-	beego.Router("/", &home.HomeHandler{}, "*:Index")
+	beego.Router("/", &home.HomeController{}, "*:Index")
 
 	// 前台详情页
-	beego.Router("/detail", &home.DetailHandler{})
+	beego.Router("/detail", &home.DetailController{})
 
 	// 后台首页
-    beego.Router("/admin", &admin.MainHandler{})
+    beego.Router("/admin", &admin.MainController{})
 }

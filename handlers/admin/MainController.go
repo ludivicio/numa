@@ -5,11 +5,11 @@ import (
 	"fmt"
 )
 
-type MainHandler struct {
-	BaseHandler
+type MainController struct {
+	BaseController
 }
 
-func (m *MainHandler) Get() {
+func (m *MainController) Get() {
 	m.Data["Website"] = "beego.me"
 	m.Data["Email"] = "astaxie@gmail.com"
 	m.TplNames = "index.tpl"

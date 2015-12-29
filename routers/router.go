@@ -14,6 +14,13 @@ func init() {
 	// 前台详情页
 	beego.Router("/detail", &home.DetailController{})
 
+	var adminURL = "/admin"
+	
 	// 后台首页
-    beego.Router("/admin", &admin.MainController{})
+    beego.Router(adminURL , &admin.MainController{})
+	
+	// 后台登录
+	beego.Router(adminURL + "/login", &admin.LoginController{}, "get:Index;post:Login")
+	
+	
 }

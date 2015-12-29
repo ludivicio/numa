@@ -37,7 +37,7 @@ func (this *BaseController) Prepare() {
 	this.actionName = strings.ToLower(actionName)
 
 }
-
+ 
 func (this *BaseController) loginVerify() {
 	if this.controllerName == "account" && (this.actionName == "login" || this.actionName == "logout") {
 		fmt.Println("login or logout...")
@@ -61,3 +61,9 @@ func (this *BaseController) GenUid() string {
 	h.Write([]byte(b64))
 	return hex.EncodeToString(h.Sum(nil))
 } 
+
+//获取用户IP地址
+func (this *BaseController) GetClientIp() string {
+	s := strings.Split(this.Ctx.Request.RemoteAddr, ":")
+	return s[0]
+}

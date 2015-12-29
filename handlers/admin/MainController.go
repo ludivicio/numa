@@ -10,9 +10,6 @@ type MainController struct {
 }
 
 func (m *MainController) Get() {
-	m.Data["Website"] = "beego.me"
-	m.Data["Email"] = "astaxie@gmail.com"
-	m.TplNames = "index.tpl"
-	fmt.Println("test main")
-	fmt.Println(new(models.Article))
+    fmt.Println(models.Article{})
+	m.TplNames = "admin/index.html"
 }

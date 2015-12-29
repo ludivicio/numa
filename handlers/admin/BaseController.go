@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strings"
 	"io"
+    "time"
 	"crypto/md5"
     "crypto/rand"
     "encoding/base64"
@@ -62,8 +63,25 @@ func (this *BaseController) GenUid() string {
 	return hex.EncodeToString(h.Sum(nil))
 } 
 
+func (this *BaseController) Base64Encode(data []byte) string {
+    return base64.URLEncoding.EncodeToString(data)
+}
+
+func (this *BaseController) Base64Decode(content string) string {
+    b, err := base64.URLEncoding.DecodeString(content)
+    if err != nil {
+        return ""
+    }
+    return string(b)
+}
+
 //获取用户IP地址
 func (this *BaseController) GetClientIp() string {
 	s := strings.Split(this.Ctx.Request.RemoteAddr, ":")
 	return s[0]
+}
+
+// GetTime 获取当前时间
+func (m *BaseController) GetTime() time.Time {
+    return time.Now()
 }

@@ -7,6 +7,7 @@ import (
 
 func main() {
 
+	// 启用Session
 	beego.SessionOn = true
 	beego.SessionName = "numa"
 	beego.AutoRender = true

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"numa/models"
 	"strings"
+	"github.com/astaxie/beego"
 )
 
 // LoginController 登录
@@ -25,6 +26,7 @@ func (m *LoginController) Login() {
     
 	fmt.Println("account = " + account)
     fmt.Println("password = " + password)
+	
 	remember := m.GetString("remember")
 
 	if account != "" && password != "" {
@@ -32,17 +34,19 @@ func (m *LoginController) Login() {
 		admin.Account = account
 		if admin.Read("account") != nil || admin.Password != models.Md5([]byte(password)) {
 			m.Data["errmsg"] = "账号或密码填写错误"
+			m.Redirect(beego.AppConfig.String("adminurl"), 302)   
 		} else {
 			admin.LastIp = m.GetClientIp()
             admin.LastTime = m.GetTime()
             admin.Update()
             
-            
-            if remember == "yes" {
+			if remember == "yes" {
                 
             }
+			
+            m.SetSession("account", account)
+			m.Redirect(beego.AppConfig.String("adminurl"), 302)   
 		}
-
 	}
 	
 	m.TplNames = "admin/login.html"

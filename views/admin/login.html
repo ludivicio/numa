@@ -41,6 +41,7 @@
     <div class="am-u-lg-4 am-u-md-6 am-u-sm-centered">
       <h3>登录</h3>
       <hr>
+
       <br>
       <form method="post" class="am-form">
         <label for="account">账号:</label>
@@ -58,9 +59,29 @@
           <input type="submit" name="" value="忘记密码 ^_^? " class="am-btn am-btn-default am-btn-sm am-fr">
         </div>
       </form>
-      <hr>
+      <hr> 
+      
+      {{if .errmsg}}
+      <div class="am-alert am-alert-danger" data-am-alert>
+        <button type="button" class="am-close">&times;</button>
+        {{.errmsg}}
+      </div>
+      {{end}}
+
     </div>
   </div>
+
+  <!--[if lt IE 9]>
+    <script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
+    <script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
+    <script src="assets/js/amazeui.ie8polyfill.min.js"></script>
+  <![endif]-->
+
+  <!--[if (gte IE 9)|!(IE)]><!-->
+  <script src="/static/assets/js/jquery.min.js"></script>
+  <!--<![endif]-->
+  <script src="/static/assets/js/amazeui.min.js"></script>
+  <script src="/static/assets/js/app.js"></script>
 </body>
 
 </html>

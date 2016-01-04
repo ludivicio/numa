@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS `admin` (
   `password` VARCHAR(32) NOT NULL DEFAULT '' COMMENT '管理员密码',
   `last_ip` VARCHAR(32) NOT NULL COMMENT '最后登录的ip地址',
   `last_time` datetime NOT NULL COMMENT '最后登录的时间',
+  `token` VARCHAR(32) NOT NULL COMMENT '登录时的UUID',
   `email` VARCHAR(100) NULL COMMENT '邮箱',
   `status` TINYINT(4) NOT NULL DEFAULT 1 COMMENT '账号是否可用 {0:不可用, 1:可用}',
   PRIMARY KEY (`id`),
@@ -24,11 +25,12 @@ CREATE TABLE IF NOT EXISTS `admin` (
 
 // 管理员表
 type Admin struct {
-    Id int32
+    ID int32
     Account string      `orm:"unique;size(32);index;"`
     Password string     `orm:"size(32)"`
-    LastIp string       `orm:"size(32)"`
+    LastIP string       `orm:"size(32)"`
     LastTime time.Time  `orm:"type(datatime);index"`
+    Token string        `orm:"size(32)"`
     Email string        `orm:"size(100)"`
     Status int8
 }

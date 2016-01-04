@@ -5,11 +5,11 @@ import (
 	"fmt"
 )
 
-type MainController struct {
+type IndexController struct {
 	BaseController
 }
 
-func (m *MainController) Get() {
+func (m *IndexController) Get() {
     fmt.Println(models.Article{})
 	m.TplNames = "admin/index.html"
 }

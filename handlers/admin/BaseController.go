@@ -1,28 +1,26 @@
 package admin
 
 import (
+	"encoding/base64"
 	"fmt"
+	"numa/models"
+	"numa/toolkit"
 	"strings"
-	"io"
-    "time"
-	"crypto/md5"
-    "crypto/rand"
-    "encoding/base64"
-    "encoding/hex"
+	"net"
 	"github.com/astaxie/beego"
 )
 
 const (
-	BIG_IMAGE_PATH   = "./static/upload/bimage/"
-	SMALL_IMAGE_PATH = "./static/upload/simage/"
-	FILE_PATH        = "./static/upload/attachment/"
+	BigImagePath   = "./static/upload/bimage/"
+	SmallImagePath = "./static/upload/simage/"
+	FilePath       = "./static/upload/attachment/"
 )
 
-var pathArr []string = []string{"", BIG_IMAGE_PATH, SMALL_IMAGE_PATH, FILE_PATH}
+var pathArr []string = []string{"", BigImagePath, SmallImagePath, FilePath}
 
 type BaseController struct {
 	beego.Controller
-	userID         int32
+	token          string
 	userName       string
 	moduleName     string
 	controllerName string
@@ -30,58 +28,77 @@ type BaseController struct {
 }
 
 // Prepare function
-func (this *BaseController) Prepare() {
-
-	controllerName, actionName := this.GetControllerAndAction()
-	this.moduleName = "admin"
-	this.controllerName = strings.ToLower(controllerName[0 : len(controllerName)-10])
-	this.actionName = strings.ToLower(actionName)
-
+func (m *BaseController) Prepare() {
+	controllerName, actionName := m.GetControllerAndAction()
+	fmt.Println("controllerName = " + controllerName + ", actionName = " + actionName)
+	m.controllerName = strings.ToLower(controllerName[0 : len(controllerName)-10])
+	m.actionName = strings.ToLower(actionName)
+	fmt.Println("controllerName = " + m.controllerName + ", actionName = " + m.actionName)
+	m.auth()
 }
- 
-func (this *BaseController) loginVerify() {
-	if this.controllerName == "account" && (this.actionName == "login" || this.actionName == "logout") {
+
+func (m *BaseController) auth() {
+	if m.controllerName == "index" && (m.actionName == "gologin" || m.actionName == "login" || m.actionName == "logout") {
 		fmt.Println("login or logout...")
 	} else {
-		arr := strings.Split(this.Ctx.GetCookie("auth"), "|")
-		if len(arr) == 2 {
+		b64Auth := m.Ctx.GetCookie("auth")
+		// fmt.Println("auth = " + b64Auth)
+		if b64Auth != "" {
+			data, err := base64.StdEncoding.DecodeString(b64Auth)
+			if err == nil {
+				decodeData, err := toolkit.AesDecrypt(data, []byte(beego.AppConfig.String("aeskey")))
+				if err == nil {
+					decodeAuth := string(decodeData)
+					// fmt.Println("decode auth = " + decodeAuth)
+					arr := strings.Split(decodeAuth, "|")
+					if len(arr) == 2 {
+						ip, token := arr[0], arr[1]
+						if ip == m.GetClientIP() {
+							// 先从Session中读取admin信息，如果没有的话再从数据库中读取
+							// 这里先直接从数据库中读取
+							var admin models.Admin
+							admin.Token = token
+							if admin.Read("token") == nil {
+								m.token = token
+								m.userName = admin.Account
+							}
+						} 
+					}
+				}
+			}
+		}
 
+		if m.token == "" {
+			m.Ctx.SetCookie("auth", "")
+			m.Redirect(beego.AppConfig.String("adminurl")+"/login", 302)
 		}
 	}
 }
 
-
-// 随机生成UUID
-func (this *BaseController) GenUid() string {
-	b := make([]byte, 32)
-	if _, err := io.ReadFull(rand.Reader, b); err != nil {
-		return ""
+// display 渲染模版
+func (m *BaseController) display(tpl ...string) {
+	var tplname string
+	if len(tpl) == 1 {
+		tplname = beego.AppConfig.String("adminpath") + "/" + tpl[0] + ".html"
+	} else {
+		tplname = beego.AppConfig.String("adminpath") + "/" + m.controllerName + ".html"
 	}
-	b64 := base64.URLEncoding.EncodeToString(b)
-	h := md5.New()
-	h.Write([]byte(b64))
-	return hex.EncodeToString(h.Sum(nil))
-} 
 
-func (this *BaseController) Base64Encode(data []byte) string {
-    return base64.URLEncoding.EncodeToString(data)
+	m.Data["contrName"] = m.controllerName
+	m.Data["adminUrl"] = beego.AppConfig.String("adminurl")
+	m.Data["userName"] = m.userName
+	m.Layout = beego.AppConfig.String("adminpath") + "/layout.html"
+	m.TplNames = tplname
 }
 
-func (this *BaseController) Base64Decode(content string) string {
-    b, err := base64.URLEncoding.DecodeString(content)
-    if err != nil {
-        return ""
-    }
-    return string(b)
+// GetClientIP 获取用户IP地址
+func (m *BaseController) GetClientIP() string {
+	// return m.Ctx.Request.Header.Get("x-forwarded-for")
+	ip, _, _ := net.SplitHostPort(m.Ctx.Request.RemoteAddr)
+	return ip
 }
 
-//获取用户IP地址
-func (this *BaseController) GetClientIp() string {
-	s := strings.Split(this.Ctx.Request.RemoteAddr, ":")
-	return s[0]
-}
-
-// GetTime 获取当前时间
-func (m *BaseController) GetTime() time.Time {
-    return time.Now()
+// IsPost 是否post提交
+func (m *BaseController) IsPost() bool {
+	return m.Ctx.Request.Method == "POST"
 }

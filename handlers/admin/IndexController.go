@@ -6,7 +6,8 @@ import (
 	"numa/models"
 	"numa/toolkit"
 	"strings"
-
+    "os"
+	"runtime"
 	"github.com/astaxie/beego"
 )
 
@@ -17,7 +18,12 @@ type IndexController struct {
 
 // Index 后台首页
 func (m *IndexController) Index() {
-	m.Data["title"] = "首页"
+	m.Data["title"] = "首页"  
+    m.Data["hostname"], _ = os.Hostname()
+	m.Data["goversion"] = runtime.Version()
+	m.Data["os"] = runtime.GOOS
+	m.Data["cpunum"] = runtime.NumCPU()
+	m.Data["arch"] = runtime.GOARCH 
 	m.display()
 }
 
@@ -105,5 +111,5 @@ func (m *IndexController) Logout() {
 
 // Profile 管理员信息修改
 func (m *IndexController) Profile() {
-
+    m.display("profile")
 }

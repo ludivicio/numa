@@ -1,7 +1,6 @@
 package toolkit
 
 import (
-	"bytes"
 	"crypto/aes"
 	"crypto/cipher"
 	"crypto/md5"

@@ -83,12 +83,27 @@ func (m *BaseController) display(tpl ...string) {
 	} else {
 		tplname = beego.AppConfig.String("adminpath") + "/" + m.controllerName + ".html"
 	}
-
 	m.Data["contrName"] = m.controllerName
 	m.Data["adminUrl"] = beego.AppConfig.String("adminurl")
 	m.Data["userName"] = m.userName
 	m.Layout = beego.AppConfig.String("adminpath") + "/layout.html"
 	m.TplNames = tplname
+}
+
+//error 显示错误
+func (m *BaseController) error(msg ...string) {
+	if len(msg) == 1 {
+		msg = append(msg, m.Ctx.Request.Referer())
+	}
+	m.Data["contrName"] = m.controllerName
+	m.Data["adminUrl"] = beego.AppConfig.String("adminurl")
+	m.Data["userName"] = m.userName
+	m.Data["msg"] = msg[0]
+	m.Data["redirect"] = msg[1]
+	m.Layout = beego.AppConfig.String("adminpath") + "/layout.html"
+	m.TplNames = beego.AppConfig.String("adminpath") + "/" + "error.html"
+	m.Render()
+	m.StopRun()
 }
 
 // GetClientIP 获取用户IP地址

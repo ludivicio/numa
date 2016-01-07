@@ -83,6 +83,9 @@ func (m *BaseController) display(tpl ...string) {
 	} else {
 		tplname = beego.AppConfig.String("adminpath") + "/" + m.controllerName + ".html"
 	}
+	
+	fmt.Println("contrName = " + m.controllerName)
+	
 	m.Data["contrName"] = m.controllerName
 	m.Data["adminUrl"] = beego.AppConfig.String("adminurl")
 	m.Data["userName"] = m.userName

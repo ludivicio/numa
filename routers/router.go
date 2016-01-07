@@ -26,4 +26,19 @@ func init() {
     beego.Router(adminURL + "/profile", &admin.IndexController{}, "*:Profile")
 	// 修改登录密码
 	beego.Router(adminURL + "/password", &admin.IndexController{}, "*:Password")
+	
+	// 获取商品列表
+	beego.Router(adminURL + "/item", &admin.ItemController{})
+	// 获取商品分类列表
+	beego.Router(adminURL + "/item/cate", &admin.ItemCateController{})
+	// 获取文章列表
+	beego.Router(adminURL + "/article", &admin.ArticleController{})
+	// 获取文章分类列表
+	beego.Router(adminURL + "/article/cate", &admin.ArticleCateController{})
+	// 获取商城列表
+	beego.Router(adminURL + "/mall", &admin.MallController{})
+	// 获取机器用户列表
+	beego.Router(adminURL + "/autouser", &admin.AutoUserController{})
+	// 获取数据信息，包含 爆料信息， 标签信息等
+	beego.Router(adminURL + "/data", &admin.DataController{})
 }

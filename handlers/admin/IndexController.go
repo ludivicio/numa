@@ -13,7 +13,7 @@ import (
 	"github.com/astaxie/beego/orm"
 )
 
-// IndexController 后台首页控制器
+// IndexController 后台首页
 type IndexController struct {
 	BaseController
 }

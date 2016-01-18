@@ -48,6 +48,7 @@ func (m *IndexController) Login() {
 			admin.Account = account
 
 			// if account == "admin" && password == "123456" {
+			// 	admin.NickName = "我是管理员"
 			// 	admin.LastIP = m.GetClientIP()
 			// 	admin.Password = toolkit.SHA256([]byte(password))
 			//     admin.LastTime = toolkit.GetTime()
@@ -105,15 +106,36 @@ func (m *IndexController) Logout() {
 	m.Redirect(beego.AppConfig.String("adminurl")+"/login", 302)
 }
 
-// Profile 查看管理员信息
+// Profile 查看并修改管理员信息
 func (m *IndexController) Profile() {
 
 	admin := models.Admin{Account: m.userName}
-	if err := orm.NewOrm().Read(&admin, "Account"); err != nil {
+	o := orm.NewOrm()
+	if err := o.Read(&admin, "Account"); err != nil {
 		m.error(err.Error())
 	}
 
 	if m.Ctx.Request.Method == "POST" {
+		fmt.Println("收到POST请求")
+
+		nickname := strings.TrimSpace(m.GetString("nickname"))
+		email := strings.TrimSpace(m.GetString("email"))
+
+		fmt.Printf("nickname=%s, email=%s\n", nickname, email)
+
+		admin.NickName = nickname
+		admin.Email = email
+
+		if num, err := o.Update(&admin, "nick_name", "email"); err == nil {
+			if num > 0 {
+				m.Data["result"] = true
+			} else {
+				m.Data["errmsg"] = "更新失败"
+			}
+		} else {
+			m.error(err.Error())
+			m.Data["errmsg"] = "更新失败"
+		}
 
 	}
 

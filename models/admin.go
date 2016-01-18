@@ -10,6 +10,7 @@ import (
 
 CREATE TABLE IF NOT EXISTS `admin` (
   `id` INT NOT NULL AUTO_INCREMENT,
+  `nickname` VARCHAR(32) NOT NULL DEFAULT '' COMMENT '昵称',
   `account` VARCHAR(32) NOT NULL DEFAULT '' COMMENT '账号',
   `password` VARCHAR(32) NOT NULL DEFAULT '' COMMENT '管理员密码',
   `last_ip` VARCHAR(32) NOT NULL COMMENT '最后登录的ip地址',
@@ -29,11 +30,12 @@ CREATE TABLE IF NOT EXISTS `admin` (
 type Admin struct {
 	Id       int32
 	Account  string    `orm:"unique;size(32);index;"`
+	NickName string    `orm:"size(32)"`
 	Password string    `orm:"size(64)"`
 	LastIP   string    `orm:"column(last_ip);size(32)"`
 	LastTime time.Time `orm:"type(datatime);index"`
 	Token    string    `orm:"column(token);size(32)"`
-	Head     string    `orm:"default(default);size(32)"`
+	Head     string    `orm:"default(default.png);size(32)"`
 	Email    string    `orm:"size(100)"`
 	Status   int8
 }

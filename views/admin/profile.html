@@ -12,16 +12,15 @@
                 <div class="am-panel-bd">
                     <div class="am-g">
                         <div class="am-u-md-4">
-                            <img class="am-img-circle am-img-thumbnail" src="http://s.amazeui.org/media/i/demos/bw-2014-06-19.jpg?imageView/1/w/200/h/200/q/80"
-                            alt="" />
+                            <img class="am-img-circle am-img-thumbnail" id="preview" src="{{.head}}" alt="" />
                         </div>
                         <div class="am-u-md-8">
                             <p>请选择本地头像文件</p>
-                            <form class="am-form">
+                            <form class="am-form" method="post" action="{{.adminUrl}}/profile/head" enctype="multipart/form-data">
                                 <div class="am-form-group">
-                                    <input type="file" id="user-pic">
+                                    <input type="file" id="head" name="head" onchange="previewImage(this)">
                                     <p class="am-form-help">请选择要上传的文件...</p>
-                                    <button type="button" class="am-btn am-btn-primary am-btn-xs">保存</button>
+                                    <button type="submit" class="am-btn am-btn-primary am-btn-xs">保存</button>
                                 </div>
                             </form>
                         </div>
@@ -43,7 +42,6 @@
                     <label for="nickname" class="am-u-sm-3 am-form-label">昵称 / NickName</label>
                     <div class="am-u-sm-9">
                         <input type="text" id="nickname" name="nickname" placeholder="输入昵称 / NickName" value="{{.admin.NickName}}">
-                        <small>用户昵称...</small>
                     </div>
                 </div>
 
@@ -57,7 +55,7 @@
                 <div class="am-form-group">
                     <label class="am-u-sm-3 am-form-label">登录时间</label>
                     <div class="am-u-sm-9">
-                        <label class="am-form-label" style="color:#0e90d2">{{.admin.LastTime}}</label>
+                        <label class="am-form-label" style="color:#0e90d2">{{.time}}</label>
                     </div>
                 </div>
 
@@ -65,7 +63,6 @@
                     <label for="email" class="am-u-sm-3 am-form-label">电子邮件 / Email</label>
                     <div class="am-u-sm-9">
                         <input type="email" id="email" name="email" placeholder="输入你的电子邮件 / Email" value="{{.admin.Email}}">
-                        <small>邮箱你懂得...</small>
                     </div>
                 </div>
 

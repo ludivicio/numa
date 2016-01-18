@@ -55,6 +55,7 @@ func (m *IndexController) Login() {
 			// 	admin.Token = toolkit.GenUID()
 			// 	admin.Email = "lurma@qq.com"
 			// 	admin.Status = 1
+            //     admin.Head = "default.png"
 			// 	admin.Insert()
 			// 	m.Redirect(beego.AppConfig.String("adminurl"), 302)
 			// 	return
@@ -138,9 +139,16 @@ func (m *IndexController) Profile() {
 		}
 
 	}
-
-	m.Data["admin"] = admin
-	m.display("profile")
+    
+    format := admin.LastTime.Format("2006-01-02 15:04:05")
+    m.Data["time"] = format
+    m.Data["head"] = beego.AppConfig.String("headpath") + "/" + admin.Head
+    
+    fmt.Printf("head = %s\n", admin.Head)
+    
+    m.Data["admin"] = admin
+    
+    m.display("profile")
 }
 
 // Password 修改登录密码
@@ -180,4 +188,21 @@ func (m *IndexController) Password() {
 
 	m.Data["admin"] = admin
 	m.display("password")
+}
+
+// Head 上传头像
+func (m *IndexController) Head() {
+    
+    admin := models.Admin{Account: m.userName}
+	o := orm.NewOrm()
+	if err := o.Read(&admin, "Account"); err != nil {
+		m.error(err.Error())
+	}
+    
+    if m.Ctx.Request.Method == "POST" {
+        fmt.Printf("upload head...\n")
+    }
+    
+    m.Data["admin"] = admin
+    m.display("profile")
 }

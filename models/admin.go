@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS `admin` (
   `last_ip` VARCHAR(32) NOT NULL COMMENT '最后登录的ip地址',
   `last_time` datetime NOT NULL COMMENT '最后登录的时间',
   `token` VARCHAR(32) NOT NULL COMMENT '登录时的UUID',
-  `head` VARCHAR(32) NOT NULL DEFAULT 'default' COMMENT '默认头像',
+  `head` VARCHAR(32) NOT NULL DEFAULT 'default.png' COMMENT '默认头像',
   `email` VARCHAR(100) NULL COMMENT '邮箱',
   `status` TINYINT(4) NOT NULL DEFAULT 1 COMMENT '账号是否可用 {0:不可用, 1:可用}',
   PRIMARY KEY (`id`),

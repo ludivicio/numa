@@ -22,8 +22,10 @@ func init() {
 	beego.Router(adminURL + "/logout", &admin.IndexController{}, "*:Logout")
     // 后台首页
     beego.Router(adminURL, &admin.IndexController{}, "get:Index")
-    // 查看个人信息
+    // 查看修改管理员信息
     beego.Router(adminURL + "/profile", &admin.IndexController{}, "*:Profile")
+    // 上传头像
+    beego.Router(adminURL + "/profile/head", &admin.IndexController{}, "*:Head")
 	// 修改登录密码
 	beego.Router(adminURL + "/password", &admin.IndexController{}, "*:Password")
 	

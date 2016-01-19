@@ -10,7 +10,10 @@ import (
 	"encoding/hex"
 	"fmt"
 	"io"
+	"math"
 	"net/url"
+	"path"
+	"regexp"
 	"strings"
 	"time"
 )
@@ -66,37 +69,81 @@ func RawURLEncode(str string) string {
 	return strings.Replace(url.QueryEscape(str), "+", "%20", -1)
 }
 
-
 // AesEncrypt AES算法加密字符串
 func AesEncrypt(mess []byte, key []byte) ([]byte, error) {
-    var iv = key[:aes.BlockSize]
-    encrypted := make([]byte, len(mess))
-    aesBlockEncrypter, err := aes.NewCipher(key)
-    if err != nil {
-        return nil, err
-    }
-    aesEncrypter := cipher.NewCFBEncrypter(aesBlockEncrypter, iv)
-    aesEncrypter.XORKeyStream(encrypted, mess)
-    return encrypted, nil
+	var iv = key[:aes.BlockSize]
+	encrypted := make([]byte, len(mess))
+	aesBlockEncrypter, err := aes.NewCipher(key)
+	if err != nil {
+		return nil, err
+	}
+	aesEncrypter := cipher.NewCFBEncrypter(aesBlockEncrypter, iv)
+	aesEncrypter.XORKeyStream(encrypted, mess)
+	return encrypted, nil
 }
 
 // AesDecrypt AES算法解密字符串
 func AesDecrypt(src []byte, key []byte) (mess []byte, err error) {
-    defer func() {
-        //错误处理
-        if e := recover(); e != nil {
-            err = e.(error)
-        }
-    }()
-    var iv = key[:aes.BlockSize]
-    decrypted := make([]byte, len(src))
-    var aesBlockDecrypter cipher.Block
-    aesBlockDecrypter, err = aes.NewCipher([]byte(key))
-    if err != nil {
-        return nil, err
-    }
-	
-    aesDecrypter := cipher.NewCFBDecrypter(aesBlockDecrypter, iv)
-    aesDecrypter.XORKeyStream(decrypted, src)
-    return decrypted, nil
+	defer func() {
+		//错误处理
+		if e := recover(); e != nil {
+			err = e.(error)
+		}
+	}()
+	var iv = key[:aes.BlockSize]
+	decrypted := make([]byte, len(src))
+	var aesBlockDecrypter cipher.Block
+	aesBlockDecrypter, err = aes.NewCipher([]byte(key))
+	if err != nil {
+		return nil, err
+	}
+
+	aesDecrypter := cipher.NewCFBDecrypter(aesBlockDecrypter, iv)
+	aesDecrypter.XORKeyStream(decrypted, src)
+	return decrypted, nil
+}
+
+// SplitFileNameAndSuffix 分割文件名，返回不带扩展名的文件名和带(.)的扩展名
+func SplitFileNameAndSuffix(fullName string) (fileName, fileSuffix string) {
+	filenameWithSuffix := path.Base(fullName)
+	fileSuffix = path.Ext(filenameWithSuffix)
+	fileName = strings.TrimSuffix(filenameWithSuffix, fileSuffix)
+	fmt.Printf("fileName = %s, fileSuffix = %s\n", fileName, fileSuffix)
+	return fileName, fileSuffix
+}
+
+// VerifyEmail 验证邮箱是否合法
+func VerifyEmail(email string) bool {
+	pattern := `\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*`
+	reg := regexp.MustCompile(pattern)
+	return len(reg.FindAllString(email, -1)) == 1
+}
+
+// Round 浮点数四舍五入
+func Round(val float64, places int) float64 {
+	var t float64
+	f := math.Pow10(places)
+	x := val * f
+	if math.IsInf(x, 0) || math.IsNaN(x) {
+		return val
+	}
+	if x >= 0.0 {
+		t = math.Ceil(x)
+		if (t - x) > 0.50000000001 {
+			t -= 1.0
+		}
+	} else {
+		t = math.Ceil(-x)
+		if (t + x) > 0.50000000001 {
+			t -= 1.0
+		}
+		t = -t
+	}
+	x = t / f
+
+	if !math.IsInf(x, 0) {
+		return x
+	}
+
+	return t
 }

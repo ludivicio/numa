@@ -22,6 +22,15 @@
                                     <p class="am-form-help">请选择要上传的文件...</p>
                                     <button type="submit" class="am-btn am-btn-primary am-btn-xs">保存</button>
                                 </div>
+                                
+                                {{if .head_errmsg}}
+                                <div class="am-form-group">
+                                    <div class="am-alert am-alert-danger" data-am-alert>
+                                        <button type="button" class="am-close">&times;</button>
+                                        <p>{{.head_errmsg}}</p>
+                                    </div>
+                                </div>
+                                {{end}}
                             </form>
                         </div>
                     </div>
@@ -41,7 +50,7 @@
                 <div class="am-form-group">
                     <label for="nickname" class="am-u-sm-3 am-form-label">昵称 / NickName</label>
                     <div class="am-u-sm-9">
-                        <input type="text" id="nickname" name="nickname" placeholder="输入昵称 / NickName" value="{{.admin.NickName}}">
+                        <input type="text" id="nickname" name="nickname" placeholder="输入昵称 / NickName" value="{{.admin.NickName}}" maxlength="15" required>
                     </div>
                 </div>
 
@@ -62,7 +71,7 @@
                 <div class="am-form-group">
                     <label for="email" class="am-u-sm-3 am-form-label">电子邮件 / Email</label>
                     <div class="am-u-sm-9">
-                        <input type="email" id="email" name="email" placeholder="输入你的电子邮件 / Email" value="{{.admin.Email}}">
+                        <input type="email" id="email" name="email" placeholder="输入你的电子邮件 / Email" value="{{.admin.Email}}" required>
                     </div>
                 </div>
 
@@ -71,14 +80,20 @@
                         <button type="submit" class="am-btn am-btn-primary">保存修改</button>
                     </div>
                 </div>
+                
+                {{if .profile_errmsg}}
+                <div class="am-form-group">
+                    <div class="am-u-sm-9 am-u-sm-push-3">
+                        <div class="am-alert am-alert-danger" data-am-alert>
+                            <button type="button" class="am-close">&times;</button>
+                            <p>{{.profile_errmsg}}</p>
+                        </div>
+                    </div>
+                </div>
+                {{end}}
             </form>
 
-            {{if .errmsg}}
-            <div class="am-alert am-alert-danger" data-am-alert>
-                <button type="button" class="am-close">&times;</button>
-                <p>{{.errmsg}}</p>
-            </div>
-            {{end}}
+            
         </div>
     </div>
 </div>

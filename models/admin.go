@@ -29,8 +29,8 @@ CREATE TABLE IF NOT EXISTS `admin` (
 // Admin 管理员表
 type Admin struct {
 	Id       int32
-	Account  string    `orm:"unique;size(32);index;"`
-	NickName string    `orm:"size(32)"`
+	Account  string    `orm:"unique;size(64);index;"`
+	NickName string    `orm:"size(64)"`
 	Password string    `orm:"size(64)"`
 	LastIP   string    `orm:"column(last_ip);size(32)"`
 	LastTime time.Time `orm:"type(datatime);index"`

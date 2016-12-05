@@ -3,10 +3,11 @@ package admin
 import (
 	"encoding/base64"
 	"fmt"
+	"net"
 	"numa/models"
 	"numa/toolkit"
 	"strings"
-	"net"
+
 	"github.com/astaxie/beego"
 )
 
@@ -38,7 +39,7 @@ func (m *BaseController) Prepare() {
 }
 
 func (m *BaseController) auth() {
-	if m.controllerName == "index" && (m.actionName == "gologin" || m.actionName == "login" || m.actionName == "logout") {
+	if m.actionName == "gologin" || m.actionName == "login" || m.actionName == "logout" {
 		fmt.Println("login or logout...")
 	} else {
 		b64Auth := m.Ctx.GetCookie("auth")
@@ -62,13 +63,15 @@ func (m *BaseController) auth() {
 								m.token = token
 								m.userName = admin.Account
 							}
-						} 
+						}
 					}
 				}
 			}
 		}
 
 		if m.token == "" {
+			// fmt.Println("m.controllerName = " + m.controllerName)
+			// fmt.Println("m.actionName = " + m.actionName)
 			m.Ctx.SetCookie("auth", "")
 			m.Redirect(beego.AppConfig.String("adminurl")+"/login", 302)
 		}
@@ -83,14 +86,14 @@ func (m *BaseController) display(tpl ...string) {
 	} else {
 		tplname = beego.AppConfig.String("adminpath") + "/" + m.controllerName + ".html"
 	}
-	
+
 	fmt.Println("contrName = " + m.controllerName)
-	
+
 	m.Data["contrName"] = m.controllerName
 	m.Data["adminUrl"] = beego.AppConfig.String("adminurl")
 	m.Data["userName"] = m.userName
 	m.Layout = beego.AppConfig.String("adminpath") + "/layout.html"
-	m.TplNames = tplname
+	m.TplName = tplname
 }
 
 //error 显示错误
@@ -104,7 +107,7 @@ func (m *BaseController) error(msg ...string) {
 	m.Data["msg"] = msg[0]
 	m.Data["redirect"] = msg[1]
 	m.Layout = beego.AppConfig.String("adminpath") + "/layout.html"
-	m.TplNames = beego.AppConfig.String("adminpath") + "/" + "error.html"
+	m.TplName = beego.AppConfig.String("adminpath") + "/" + "error.html"
 	m.Render()
 	m.StopRun()
 }

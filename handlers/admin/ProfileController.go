@@ -39,11 +39,11 @@ func (m *ProfileController) Login() {
 			// 	admin.NickName = "我是管理员"
 			// 	admin.LastIP = m.GetClientIP()
 			// 	admin.Password = toolkit.SHA256([]byte(password))
-			//     admin.LastTime = toolkit.GetTime()
+			// 	admin.LastTime = toolkit.GetTime()
 			// 	admin.Token = toolkit.GenUID()
 			// 	admin.Email = "lurma@qq.com"
 			// 	admin.Status = 1
-			//     admin.Head = "default.png"
+			// 	admin.Head = "default.png"
 			// 	admin.Insert()
 			// 	m.Redirect(beego.AppConfig.String("adminurl"), 302)
 			// 	return
@@ -86,7 +86,7 @@ func (m *ProfileController) Login() {
 		}
 	}
 
-	m.TplNames = beego.AppConfig.String("adminpath") + "/login.html"
+	m.TplName = beego.AppConfig.String("adminpath") + "/login.html"
 }
 
 // Logout 注销登录

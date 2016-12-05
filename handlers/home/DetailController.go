@@ -11,6 +11,6 @@ type DetailController struct {
 func (d *DetailController) Get() {
 	d.Data["Website"] = "beego.me"
 	d.Data["Email"] = "astaxie@gmail.com"
-	d.TplNames = "home/detail.tpl"
+	d.TplName = "home/detail.tpl"
 	fmt.Println("test")
 }

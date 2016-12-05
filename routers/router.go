@@ -34,7 +34,9 @@ func init() {
 	// 获取商品列表
 	beego.Router(adminURL+"/item", &admin.ItemController{})
 	// 获取商品分类列表
-	beego.Router(adminURL+"/item/cate", &admin.ItemCateController{})
+	beego.Router(adminURL+"/item/cate", &admin.ItemCateController{}, "*:List")
+	// 添加商品分类
+	beego.Router(adminURL+"/item/cate/add", &admin.ItemCateController{}, "*:Add")
 	// 获取文章列表
 	beego.Router(adminURL+"/article", &admin.ArticleController{})
 	// 获取文章分类列表

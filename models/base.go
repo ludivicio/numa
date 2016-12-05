@@ -20,7 +20,7 @@ func init() {
 	// }
 
 	//注册mysql Driver
-	orm.RegisterDriver("mysql", orm.DR_MySQL)
+	orm.RegisterDriver("mysql", orm.DRMySQL)
 	//构造conn连接
 	conn := dbuser + ":" + dbpassword + "@/" + dbname + "?charset=utf8"
 	//数据库别名

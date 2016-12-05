@@ -11,6 +11,6 @@ type HomeController struct {
 func (h *HomeController) Index() {
 	h.Data["Website"] = "beego.me"
 	h.Data["Email"] = "astaxie@gmail.com"
-	h.TplNames = "home/index.tpl"
+	h.TplName = "home/index.tpl"
 	fmt.Println("test home ")
 }

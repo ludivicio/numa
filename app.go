@@ -8,11 +8,11 @@ import (
 func main() {
 
 	// 启用Session
-	beego.SessionOn = true
-	beego.SessionName = "numa"
-	beego.AutoRender = true
+	beego.BConfig.WebConfig.Session.SessionOn = true
+	beego.BConfig.WebConfig.Session.SessionName = "numa"
+	beego.BConfig.WebConfig.AutoRender = true
 
-	beego.CopyRequestBody = true
+	beego.BConfig.CopyRequestBody = true
 
 	beego.Run()
 }
